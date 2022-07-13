@@ -7,8 +7,15 @@ A [Kenneth Reitz](http://kennethreitz.org/bitcoin) Project.
 
 Run locally:
 ```sh
-docker pull kennethreitz/httpbin
-docker run -p 80:80 kennethreitz/httpbin
+docker pull dockeryounger123/tools:httpbin
+docker run -p 8099:808099 dockeryounger123/tools:httpbin
+```
+
+Or build image:
+```sh
+git clone https://github.com/young-0/httpbin.git
+cd httpbin
+docker build -t httpbin ./
 ```
 
 See http://httpbin.org for more information.
