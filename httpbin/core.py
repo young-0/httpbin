@@ -14,6 +14,7 @@ import random
 import time
 import uuid
 import argparse
+import logging
 
 from flask import (
     Flask,
@@ -73,8 +74,12 @@ def jsonify(*args, **kwargs):
     response = flask_jsonify(*args, **kwargs)
     if not response.data.endswith(b"\n"):
         response.data += b"\n"
+    # Output to file, uncomment the following 2 lines
+    # open("httpbin.log", "a+").write(response.get_data(as_text=True))
+    # open("httpbin.log", "a+").write("\n")
+    # Integrate into Gunicorn log and output
+    app.logger.info("\n" + response.get_data(as_text=True))
     return response
-
 
 # Prevent WSGI from correcting the casing of the Location header
 BaseResponse.autocorrect_location_header = False
@@ -1777,6 +1782,10 @@ def a_json_endpoint():
         }
     )
 
+if __name__ != '__main__':
+    gunicorn_logger = logging.getLogger('gunicorn.error')
+    app.logger.handlers = gunicorn_logger.handlers
+    app.logger.setLevel(gunicorn_logger.level)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

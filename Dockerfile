@@ -15,8 +15,8 @@ WORKDIR /httpbin
 RUN /bin/bash -c "pip3 install --no-cache-dir -r <(pipenv lock -r)"
 
 ADD . /httpbin
-RUN pip3 install --no-cache-dir /httpbin
+RUN pip3 install --no-cache-dir gunicorn /httpbin
 
-EXPOSE 80
+EXPOSE 8099
 
-CMD ["gunicorn", "-b", "0.0.0.0:80", "httpbin:app", "-k", "gevent"]
+CMD ["gunicorn", "-b", "0.0.0.0:8099", "httpbin:app", "-k", "gevent"]
